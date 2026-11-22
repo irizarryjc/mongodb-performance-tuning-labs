@@ -3,6 +3,8 @@
 Deterministic dataset generator for *MongoDB Performance Tuning: A Diagnostic Field Guide*
 by Juan C. Irizarry, OCP.
 
+Companion repository: `https://github.com/irizarryjc/mongodb-performance-tuning-labs`
+
 This script creates skewed, repeatable test collections in `<db_perf_lab>` (default:
 `perf_lab`) to reproduce Labs L1 through L12. It runs in **Node.js** (with the official
 `mongodb` driver) or directly inside **`mongosh`** with zero extra npm dependencies.
@@ -83,8 +85,8 @@ node scripts/generate-perf-lab.js --dry-run --scenario all --seed 42 --scale 1
 | `orders` | 100,000 | `_id`, `orderId`, `customerId`, `status`, `region`, `priority`, `channel`, `itemCount`, `totalCents`, `createdAt`, `updatedAt`, `notes` | `CUST-00001` owns ~4% of orders; top 50 own ~25%; `status="shipped"` is 68%, `pending` is 8%. |
 | `order_items` | 250,000 | `_id`, `orderId`, `customerId`, `sku`, `qty`, `unitPriceCents`, `lineTotalCents`, `warehouse`, `createdAt` | Top 5 SKUs take ~12% of line items; top 20 SKUs take ~35%. |
 | `reviews` | 50,000 | `_id`, `sku`, `customerId`, `rating`, `verifiedPurchase`, `helpfulVotes`, `title`, `body`, `createdAt` | Skewed toward hot SKUs and heavy accounts; `body` size expands in `cache-pressure`. |
-| `user_events` | 2,000 | `_id`, `customerId`, `region`, `isPowerUser`, `eventCount`, `lastEventAt`, `events[]` | Top 25 users (`USER-00001`..`USER-00025`) embed 4,000–9,000 event entries (~0.8–1.5 MB/doc). |
-| `shard_demo` | 120,000 | `_id`, `seqId`, `tenantId`, `region`, `eventType`, `amountCents`, `createdAt`, `payload` | Strictly monotonic `seqId` and `createdAt`; `TENANT-HOT` owns ~55% of rows. |
+| `user_events` | 2,000 | `_id`, `customerId`, `region`, `isPowerUser`, `eventCount`, `lastEventAt`, `events[]` | Top 25 users (`USER-00001`..`USER-00025`) embed 4,000–7,500 events in `--scenario all`, and 5,000–9,000 in `--scenario unbounded-array` (~0.8–1.5 MB/doc). |
+| `shard_demo` | 120,000 | `_id`, `seqId`, `tenantId`, `region`, `eventType`, `amountCents`, `createdAt`, `payload` | Monotonic `seqId` and `createdAt`; `TENANT-HOT` owns ~55% of rows. |
 
 ## Scenario Presets (Labs L1–L12)
 
